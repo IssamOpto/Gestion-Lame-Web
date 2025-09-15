@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import { getUsers } from '../data/users';
+import { getUsers, resetUsersToInitialState } from '../data/users';
+import { resetLotsToInitialState } from '../data/lots';
 
 const LoginPage: React.FC = () => {
   const [login, setLogin] = useState('');
@@ -14,18 +15,35 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    console.count('handleLogin calls');
     const users = getUsers();
     const user = users.find((u) => u.login === login && u.password === password);
 
     if (user) {
-      localStorage.setItem('user', JSON.stringify({ isLoggedIn: true, username: user.login, role: user.role }));
+      localStorage.setItem('user', JSON.stringify({ isLoggedIn: true, username: user.login, role: user.role, id: user.id }));
+      console.log('User data stored in localStorage:', { isLoggedIn: true, username: user.login, role: user.role, id: user.id });
+      console.log('Logged in user role (before navigation):', user.role);
       if (user.role === 'Administrateur') {
         navigate('/users');
+      } else if (user.role === 'Client') {
+        navigate('/client-dashboard');
+      } else if (user.role === 'Distributeur') {
+        navigate('/distributor-dashboard');
       } else {
-        navigate('/lots');
+        console.error('Unknown user role, redirecting to login:', user.role);
+        navigate('/login');
       }
     } else {
       setError('Login ou mot de passe incorrect.');
+    }
+  };
+
+  const handleResetData = () => {
+    if (window.confirm("Êtes-vous sûr de vouloir réinitialiser toutes les données (utilisateurs et lots) ? Cette action est irréversible.")) {
+      resetUsersToInitialState();
+      resetLotsToInitialState();
+      alert("Données réinitialisées avec succès ! La page va se recharger.");
+      window.location.reload();
     }
   };
 
@@ -91,6 +109,16 @@ const LoginPage: React.FC = () => {
               </Button>
             </div>
           </form>
+          <div className="mt-4">
+            <Button
+              type="button"
+              variant="danger"
+              className="w-full flex justify-center py-2 px-4"
+              onClick={handleResetData}
+            >
+              Réinitialiser toutes les données
+            </Button>
+          </div>
         </div>
       </div>
     </div>

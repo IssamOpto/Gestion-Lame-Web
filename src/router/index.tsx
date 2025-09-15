@@ -4,12 +4,18 @@ import Layout from '../components/layout/Layout';
 import LoginPage from '../pages/LoginPage';
 import UserManagementPage from '../pages/UserManagementPage';
 import LotManagementPage from '../pages/LotManagementPage';
+import ClientDashboardPage from '../pages/ClientDashboardPage';
+import DistributorDashboardPage from '../pages/DistributorDashboardPage';
+import DistributorAccountManagementPage from '../pages/DistributorAccountManagementPage';
+import DistributorClientManagementPage from '../pages/DistributorClientManagementPage';
+import DistributorSalesTrackingPage from '../pages/DistributorSalesTrackingPage';
 
 const isAuthenticated = () => {
   const user = localStorage.getItem('user');
   if (user) {
     try {
       const parsedUser = JSON.parse(user);
+      console.log('isAuthenticated user role:', parsedUser.role);
       return parsedUser.isLoggedIn === true;
     } catch (e) {
       return false;
@@ -50,6 +56,32 @@ export const router = createBrowserRouter([
       {
         path: 'lots',
         element: <LotManagementPage />,
+      },
+      {
+        path: 'client-dashboard',
+        element: <ClientDashboardPage />,
+      },
+      {
+        path: 'distributor-dashboard',
+        element: <DistributorDashboardPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="account" replace />,
+          },
+          {
+            path: 'account',
+            element: <DistributorAccountManagementPage />,
+          },
+          {
+            path: 'clients',
+            element: <DistributorClientManagementPage />,
+          },
+          {
+            path: 'sales',
+            element: <DistributorSalesTrackingPage />,
+          },
+        ],
       },
     ],
   },

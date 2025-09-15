@@ -47,3 +47,8 @@ export const getUsers = (): User[] => {
 export const saveUsers = (users: User[]): void => {
   localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
 };
+
+export const resetUsersToInitialState = (): void => {
+  const initialUsers = getInitialUsers();
+  saveUsers(initialUsers);
+};

@@ -54,3 +54,26 @@ export const generateLots = (carton: number, annee: number, nombreBoites: number
 
   return lots;
 };
+
+export const updateLotUsage = (lotId: string, clientName: string, distributorName: string, usageDate: string): boolean => {
+  const lots = getLots();
+  const lotIndex = lots.findIndex(lot => lot.id === lotId);
+
+  if (lotIndex > -1) {
+    const updatedLot = {
+      ...lots[lotIndex],
+      dateUtilisation: usageDate,
+      clientUtilisateur: clientName,
+      distributeurAssocie: distributorName,
+      statut: 'Utilisé', // Set status to 'Utilisé'
+    };
+    lots[lotIndex] = updatedLot;
+    saveLots(lots);
+    return true;
+  }
+  return false;
+};
+
+export const resetLotsToInitialState = (): void => {
+  saveLots([]);
+};

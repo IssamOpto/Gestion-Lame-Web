@@ -14,9 +14,27 @@ const LotManagementPage: React.FC = () => {
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [filter, setFilter] = useState('');
 
-  useEffect(() => {
+  // Function to load lots from localStorage
+  const loadLots = () => {
     setLots(getLots());
-  }, []);
+  };
+
+  useEffect(() => {
+    loadLots();
+
+    // Listen for changes in localStorage from other tabs/windows
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'optoscopia_lots') { // Assuming LOTS_STORAGE_KEY is 'optoscopia_lots'
+        loadLots();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const getLastCartonNumber = () => {
     if (lots.length === 0) return 0;
@@ -65,37 +83,37 @@ const LotManagementPage: React.FC = () => {
   );
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Gestion des Lots</h1>
-      </div>
-      <div className="mb-4">
-        <div className="flex justify-end space-x-2 mb-2">
-          <Button onClick={() => setIsGenerateModalOpen(true)}>
+    <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-extrabold text-gray-800">Gestion des Lots</h1>
+        <div className="flex space-x-3">
+          <Button onClick={() => setIsGenerateModalOpen(true)} size="lg">
             <FilePlus className="mr-2" size={20} />
             Générer Numéro de Lot
           </Button>
-          <Button variant="success" onClick={() => setIsExportModalOpen(true)}>
+          <Button variant="success" onClick={() => setIsExportModalOpen(true)} size="lg">
             <FileOutput className="mr-2" size={20} />
             Exporter Excel
           </Button>
         </div>
-        <div>
-          <Input
-            id="filter"
-            label="Filtrer les lots"
-            type="text"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            placeholder="Filtrer par numéro de lot, client ou distributeur"
-          />
-        </div>
       </div>
-      <div className="flex justify-center">
+
+      <div className="mb-6">
+        <Input
+          id="filter"
+          label="Filtrer les lots"
+          type="text"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder="Filtrer par numéro de lot, client ou distributeur"
+        />
+      </div>
+
+      <div className="overflow-x-auto">
         <LotTable 
           lots={filteredLots} 
           onDelete={handleDeleteLot} 
-          onStatusChange={handleStatusChange} // Pass onStatusChange prop
+          onStatusChange={handleStatusChange}
         />
       </div>
 
