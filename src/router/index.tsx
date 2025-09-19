@@ -9,6 +9,7 @@ import DistributorDashboardPage from '../pages/DistributorDashboardPage';
 import DistributorAccountManagementPage from '../pages/DistributorAccountManagementPage';
 import DistributorClientManagementPage from '../pages/DistributorClientManagementPage';
 import DistributorSalesTrackingPage from '../pages/DistributorSalesTrackingPage';
+import ClientAccountManagementPage from '../pages/ClientAccountManagementPage';
 
 const isAuthenticated = () => {
   const user = localStorage.getItem('user');
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
       {
         path: 'client-dashboard',
         element: <ClientDashboardPage />,
+      },
+      {
+        path: 'client-account-management',
+        element: <ClientAccountManagementPage />,
       },
       {
         path: 'distributor-dashboard',

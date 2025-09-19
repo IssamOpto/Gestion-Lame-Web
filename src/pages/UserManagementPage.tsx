@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserPlus } from 'lucide-react';
-import { getUsers, saveUsers, User } from '../data/users';
+import { getUsers, saveUsers, User, UserRole } from '../data/users';
 import UserTable from '../components/features/users/UserTable';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
@@ -9,12 +9,22 @@ import Input from '../components/ui/Input';
 
 const UserManagementPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [distributors, setDistributors] = useState<User[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [filter, setFilter] = useState('');
+  const [loggedInUserRole, setLoggedInUserRole] = useState<UserRole | null>(null);
 
   useEffect(() => {
-    setUsers(getUsers());
+    const allUsers = getUsers();
+    setUsers(allUsers);
+    setDistributors(allUsers.filter(user => user.role === 'Distributeur'));
+
+    const loggedInUserString = localStorage.getItem('user');
+    if (loggedInUserString) {
+      const loggedInUser = JSON.parse(loggedInUserString);
+      setLoggedInUserRole(loggedInUser.role);
+    }
   }, []);
 
   const handleOpenModal = (user: User | null = null) => {
@@ -28,9 +38,15 @@ const UserManagementPage: React.FC = () => {
   };
 
   const handleSaveUser = (userToSave: User) => {
-    const updatedUsers = userToSave.id && users.some(u => u.id === userToSave.id)
-      ? users.map(u => (u.id === userToSave.id ? userToSave : u))
-      : [...users, userToSave];
+    let updatedUsers;
+    if (selectedUser) {
+      // We are in edit mode.
+      // The user might have changed the ID. We need to replace the user with the original ID.
+      updatedUsers = users.map(u => (u.id === selectedUser.id ? userToSave : u));
+    } else {
+      // We are in create mode.
+      updatedUsers = [...users, userToSave];
+    }
     
     setUsers(updatedUsers);
     saveUsers(updatedUsers);
@@ -84,6 +100,7 @@ const UserManagementPage: React.FC = () => {
         onEdit={handleOpenModal} 
         onDelete={handleDeleteUser} 
         onStatusChange={handleStatusChange}
+        allUsers={users}
       />
 
       <Modal 
@@ -95,6 +112,8 @@ const UserManagementPage: React.FC = () => {
           user={selectedUser}
           onSave={handleSaveUser} 
           onCancel={handleCloseModal} 
+          distributors={distributors}
+          loggedInUserRole={loggedInUserRole}
         />
       </Modal>
     </div>

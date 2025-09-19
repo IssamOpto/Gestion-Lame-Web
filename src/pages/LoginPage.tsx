@@ -20,6 +20,10 @@ const LoginPage: React.FC = () => {
     const user = users.find((u) => u.login === login && u.password === password);
 
     if (user) {
+      if (user.statut === 'Inactif') {
+        setError('Votre compte est inactif. Veuillez contacter l\'administrateur.');
+        return;
+      }
       localStorage.setItem('user', JSON.stringify({ isLoggedIn: true, username: user.login, role: user.role, id: user.id }));
       console.log('User data stored in localStorage:', { isLoggedIn: true, username: user.login, role: user.role, id: user.id });
       console.log('Logged in user role (before navigation):', user.role);

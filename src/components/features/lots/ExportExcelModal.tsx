@@ -12,7 +12,7 @@ const ExportExcelModal: React.FC<ExportExcelModalProps> = ({ lots, onClose }) =>
   const [selectedCartons, setSelectedCartons] = useState<string[]>([]);
 
   const availableCartons = lots
-    .filter(lot => lot.statut === 'Actif' && lot.numeroBoite === '00')
+    .filter(lot => lot.statut === 'Actif' && lot.numeroBoite === '0000')
     .map(lot => lot.numeroCarton);
 
   const handleToggleCarton = (carton: string) => {

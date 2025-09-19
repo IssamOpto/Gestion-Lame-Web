@@ -27,11 +27,11 @@ const Sidebar: React.FC = () => {
     }`;
 
   return (
-    <div className="w-64 h-screen bg-gray-100 border-r p-4 flex flex-col">
+    <div className="w-64 h-screen bg-gray-100 border-r p-4 flex flex-col fixed top-0 left-0">
       <div className="flex items-center mb-8">
         <h1 className="text-xl font-bold">
           {userRole === 'Administrateur' && 'Espace Administrateur'}
-          {userRole === 'Distributeur' && 'Tableau de Bord Distributeur'}
+          {userRole === 'Distributeur' && 'Espace Distributeur'}
           {userRole === 'Client' && 'Espace Client'}
           {!userRole && 'Chargement...'}
         </h1>
@@ -66,10 +66,16 @@ const Sidebar: React.FC = () => {
           </>
         )}
         {userRole === 'Client' && (
-          <NavLink to="/client-dashboard" className={navLinkClasses}>
-            <User className="mr-3" size={20} />
-            Espace Client
-          </NavLink>
+          <>
+            <NavLink to="/client-account-management" className={navLinkClasses}>
+              <Settings className="mr-3" size={20} />
+              Gestion de Compte
+            </NavLink>
+            <NavLink to="/client-dashboard" className={navLinkClasses}>
+              <Package className="mr-3" size={20} />
+              Gestion Des Lames
+            </NavLink>
+          </>
         )}
       </nav>
       <div className="mt-auto">

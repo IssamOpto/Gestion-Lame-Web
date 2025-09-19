@@ -51,6 +51,7 @@ const DistributorAccountManagementPage: React.FC = () => {
         user={distributor}
         onSave={handleSave}
         onCancel={handleCancel}
+                disableRoleEditing={true}
       />
     </div>
   );

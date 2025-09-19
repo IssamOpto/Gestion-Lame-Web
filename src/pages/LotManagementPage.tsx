@@ -66,15 +66,15 @@ const LotManagementPage: React.FC = () => {
     }
   };
   
-  
-
-  const handleStatusChange = (lotToUpdate: Lot, newStatus: 'Actif' | 'Inactif') => {
-    const updatedLots = lots.map(lot => 
-      lot.id === lotToUpdate.id ? { ...lot, statut: newStatus } : lot
+  const handleToggleStatus = (lotId: string, newStatus: 'Actif' | 'Inactif') => {
+    const updatedLots = lots.map(lot =>
+      lot.id === lotId ? { ...lot, statut: newStatus } : lot
     );
     setLots(updatedLots);
     saveLots(updatedLots);
   };
+  
+  
 
   const filteredLots = lots.filter(lot =>
     lot.id.toLowerCase().includes(filter.toLowerCase()) ||
@@ -112,8 +112,8 @@ const LotManagementPage: React.FC = () => {
       <div className="overflow-x-auto">
         <LotTable 
           lots={filteredLots} 
-          onDelete={handleDeleteLot} 
-          onStatusChange={handleStatusChange}
+          onDelete={handleDeleteLot}
+          onToggleStatus={handleToggleStatus}
         />
       </div>
 
@@ -125,7 +125,6 @@ const LotManagementPage: React.FC = () => {
         <LotGenerationForm
           onGenerate={handleGenerateLots}
           onCancel={() => setIsGenerateModalOpen(false)}
-          lastCartonNumber={getLastCartonNumber()}
         />
       </Modal>
 

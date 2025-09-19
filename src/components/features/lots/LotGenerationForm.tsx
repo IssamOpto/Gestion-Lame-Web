@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../../ui/Button';
 import Input from '../../ui/Input';
 
 interface LotGenerationFormProps {
   onGenerate: (carton: number, annee: number, nombreBoites: number) => void;
   onCancel: () => void;
-  lastCartonNumber: number;
 }
 
-const LotGenerationForm: React.FC<LotGenerationFormProps> = ({ onGenerate, onCancel, lastCartonNumber }) => {
-  const [carton, setCarton] = useState(lastCartonNumber + 1);
+const LotGenerationForm: React.FC<LotGenerationFormProps> = ({ onGenerate, onCancel }) => {
+  const [carton, setCarton] = useState(0);
   const [annee, setAnnee] = useState(new Date().getFullYear());
   const [nombreBoites, setNombreBoites] = useState(25);
+
+  useEffect(() => {
+    const generateRandomFourDigitNumber = () => {
+      return Math.floor(1000 + Math.random() * 9000);
+    };
+    setCarton(generateRandomFourDigitNumber());
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

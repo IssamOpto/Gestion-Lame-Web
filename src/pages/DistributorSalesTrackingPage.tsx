@@ -71,8 +71,7 @@ const DistributorSalesTrackingPage: React.FC = () => {
     const lowerCaseFilter = filter.toLowerCase();
     return (
       lot.id.toLowerCase().includes(lowerCaseFilter) ||
-      (lot.clientUtilisateur && lot.clientUtilisateur.toLowerCase().includes(lowerCaseFilter)) ||
-      lot.statut.toLowerCase().includes(lowerCaseFilter)
+      (lot.clientUtilisateur && lot.clientUtilisateur.toLowerCase().includes(lowerCaseFilter))
     );
   });
 
@@ -87,7 +86,7 @@ const DistributorSalesTrackingPage: React.FC = () => {
           type="text"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filtrer par numéro de lot, client ou statut"
+          placeholder="Filtrer par numéro de lot ou client"
         />
       </div>
 
@@ -109,7 +108,6 @@ const DistributorSalesTrackingPage: React.FC = () => {
             <p><strong>Numéro de lot:</strong> {selectedLotForDetails.id}</p>
             <p><strong>Client consommateur:</strong> {selectedLotForDetails.clientUtilisateur || 'N/A'}</p>
             <p><strong>Date de consommation:</strong> {selectedLotForDetails.dateUtilisation ? new Date(selectedLotForDetails.dateUtilisation).toLocaleDateString() : 'N/A'}</p>
-            <p><strong>Statut du lot:</strong> {selectedLotForDetails.statut}</p>
             {/* Add more details if needed */}
           </div>
         )}
