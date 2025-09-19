@@ -26,7 +26,6 @@ const SalesTrackingTable: React.FC<SalesTrackingTableProps> = ({ lots, onDelete,
         <thead className="bg-gray-100">
           <tr>
             <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Numéro de lot</th>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Code Activation</th>
             <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Date de consommation</th>
             <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Client ayant consommé le lot</th>
             <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
@@ -35,7 +34,7 @@ const SalesTrackingTable: React.FC<SalesTrackingTableProps> = ({ lots, onDelete,
         <tbody className="bg-white divide-y divide-gray-200">
           {lots.length === 0 ? (
             <tr>
-              <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+              <td colSpan={4} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                 Aucun lot consommé trouvé.
               </td>
             </tr>
@@ -43,21 +42,6 @@ const SalesTrackingTable: React.FC<SalesTrackingTableProps> = ({ lots, onDelete,
             lots.map((lot) => (
               <tr key={lot.id} className="hover:bg-gray-50 even:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">{lot.id}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                  {lot.codeValidation ? (
-                    <div className="flex items-center justify-center">
-                      <span>{`${lot.id}-${lot.codeValidation}`}</span>
-                      <Button 
-                        variant="success" 
-                        size="sm" 
-                        onClick={() => handleCopy(`${lot.id}-${lot.codeValidation}`)}
-                        className="ml-2"
-                      >
-                        <Clipboard size={16} />
-                      </Button>
-                    </div>
-                  ) : 'N/A'}
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{lot.dateUtilisation ? new Date(lot.dateUtilisation).toLocaleDateString() : 'N/A'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">{lot.clientUtilisateur || 'N/A'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center justify-center space-x-2">

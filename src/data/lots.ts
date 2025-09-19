@@ -20,12 +20,16 @@ const LOTS_STORAGE_KEY = 'optoscopia_lots';
 export const getLots = (): Lot[] => {
   const lotsJson = localStorage.getItem(LOTS_STORAGE_KEY);
   if (lotsJson) {
-    return JSON.parse(lotsJson);
+    const lots = JSON.parse(lotsJson);
+    console.log('getLots: Retrieved lots from localStorage', lots);
+    return lots;
   }
+  console.log('getLots: No lots found in localStorage, returning empty array');
   return [];
 };
 
 export const saveLots = (lots: Lot[]): void => {
+  console.log('saveLots: Saving lots to localStorage', lots);
   localStorage.setItem(LOTS_STORAGE_KEY, JSON.stringify(lots));
 };
 
@@ -100,11 +104,12 @@ export const updateLotUsage = (lotId: string, client: User, usageDate: string): 
           ...lot,
           dateUtilisation: lot.dateUtilisation || usageDate,
           clientUtilisateur: lot.clientUtilisateur || clientName,
-          distributeurAssocie: lot.distributeurAssocie || distributorName,
+          distributeurAssocie: client.distributeurAssocie, // Corrected line
           statut: 'Utilisé',
           codeValidation: validationCode,
         };
         lots[lotIndex] = updatedLot;
+        console.log('updateLotUsage: Lot updated, about to save', updatedLot);
         saveLots(lots);
         return { success: true, validationCode: fullActivationCode };
       }
