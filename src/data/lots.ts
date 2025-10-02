@@ -3,7 +3,7 @@ import Hex from 'crypto-js/enc-hex';
 import { User, getUsers } from './users';
 
 export interface Lot {
-  id: string; // Numéro de lot, e.g., OPTL25-000101
+  id: string; // Numéro de série, e.g., 000101
   numeroCarton: string;
   annee: string;
   numeroBoite: string;
@@ -44,7 +44,7 @@ export const generateLots = (carton: number, annee: number, nombreBoites: number
 
   // Lot for the carton itself (reintroduced)
   lots.push({
-    id: `OPTL${anneeStr}-${cartonStr}0000`, // New format for carton lot
+    id: `${cartonStr}0000`, // New format for carton lot
     numeroCarton: cartonStr,
     annee: anneeStr,
     numeroBoite: '0000', // 4 zeros for carton lot
@@ -58,7 +58,7 @@ export const generateLots = (carton: number, annee: number, nombreBoites: number
     const boiteStr = boiteNum.toString().padStart(4, '0');
 
     lots.push({
-      id: `OPTL${anneeStr}-${cartonStr}${boiteStr}`,
+      id: `${cartonStr}${boiteStr}`,
       numeroCarton: cartonStr,
       annee: anneeStr,
       numeroBoite: boiteStr,
@@ -79,12 +79,12 @@ export const updateLotUsage = (lotId: string, client: User, usageDate: string): 
       const lot = lots[lotIndex];
       // If the lot is inactive, prevent activation code generation
       if (lot.statut === 'Inactif') {
-        return { success: false, error: 'Ce lot est inactif et ne peut pas être utilisé.' };
+        return { success: false, error: 'Ce numéro de série est inactif et ne peut pas être utilisé.' };
       }
 
       // Check if already used by another client
       if (lot.statut === 'Utilisé' && lot.clientUtilisateur !== clientName) {
-        return { success: false, error: 'Lot utilisé par un autre utilisateur.' };
+        return { success: false, error: 'Numéro de série utilisé par un autre utilisateur.' };
       }
   
       // If the lot is active, or already used by the same client, generate/retrieve the code
@@ -115,9 +115,9 @@ export const updateLotUsage = (lotId: string, client: User, usageDate: string): 
       }
       // If the lot is not 'Actif' or 'Utilisé' by the same client, and not 'Inactif' (already handled), it's an unexpected state.
       // This return statement handles cases where lot.statut is neither 'Actif', 'Utilisé', nor 'Inactif'.
-      return { success: false, error: "Statut du lot non valide pour l'utilisation." };
+      return { success: false, error: "Statut du numéro de série non valide pour l'utilisation." };
     }
-    return { success: false, error: 'Lot non trouvé.' };
+    return { success: false, error: 'Numéro de série non trouvé.' };
   };
 
 export const resetLotsToInitialState = (): void => {

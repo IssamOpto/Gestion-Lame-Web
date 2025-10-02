@@ -4,14 +4,14 @@ import Button from '../../ui/Button';
 import * as XLSX from 'xlsx';
 
 interface ExportExcelModalProps {
-  lots: Lot[];
+  series: Lot[];
   onClose: () => void;
 }
 
-const ExportExcelModal: React.FC<ExportExcelModalProps> = ({ lots, onClose }) => {
+const ExportExcelModal: React.FC<ExportExcelModalProps> = ({ series, onClose }) => {
   const [selectedCartons, setSelectedCartons] = useState<string[]>([]);
 
-  const availableCartons = lots
+  const availableCartons = series
     .filter(lot => lot.statut === 'Actif' && lot.numeroBoite === '0000')
     .map(lot => lot.numeroCarton);
 
@@ -22,12 +22,12 @@ const ExportExcelModal: React.FC<ExportExcelModalProps> = ({ lots, onClose }) =>
   };
 
   const handleExport = () => {
-    const lotsToExport = lots.filter(lot =>
+    const lotsToExport = series.filter(lot =>
       selectedCartons.includes(lot.numeroCarton) && lot.numeroBoite !== '00'
     );
 
     const worksheet = XLSX.utils.json_to_sheet(lotsToExport.map(lot => ({
-      'Numéro de lot': lot.id,
+      'Numéro de série': lot.id,
       'Date de génération': new Date(lot.dateGeneration).toLocaleDateString(),
     })));
     const workbook = XLSX.utils.book_new();

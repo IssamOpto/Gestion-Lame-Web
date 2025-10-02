@@ -35,14 +35,6 @@ const LotGenerationForm: React.FC<LotGenerationFormProps> = ({ onGenerate, onCan
         required
       />
       <Input
-        name="annee"
-        label="Année (AAAA)"
-        type="number"
-        value={annee}
-        onChange={(e) => setAnnee(Number(e.target.value))}
-        required
-      />
-      <Input
         name="nombreBoites"
         label="Nombre de boîtes par carton"
         type="number"

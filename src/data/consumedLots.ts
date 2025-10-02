@@ -1,6 +1,6 @@
 export interface ConsumedLot {
   id: string; // Unique ID for the consumed lot entry
-  lotNumber: string; // Numéro de lot (e.g., OPTLAA-CCCCBB)
+  lotNumber: string; // Numéro de série (e.g., CCCCBBBB)
   consumptionDate: string; // Date de consommation (ISO string)
   clientId: string; // ID of the client who consumed the lot
   clientName: string; // Name of the client (for display)

@@ -5,14 +5,14 @@ import ActivationCodeGenerator from '../components/features/client/ActivationCod
 import UsedLotsTable from '../components/features/client/UsedLotsTable';
 
 const ClientDashboardPage: React.FC = () => {
-  const [userLots, setUserLots] = useState<Lot[]>([]);
+  const [userSeries, setUserSeries] = useState<Lot[]>([]);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const loadUserLots = (client: User) => {
+  const loadUserSeries = (client: User) => {
     const clientName = `${client.prenom} ${client.nom}`;
-    const allLots = getLots();
-    const lotsForUser = allLots.filter(lot => lot.clientUtilisateur === clientName);
-    setUserLots(lotsForUser);
+    const allSeries = getLots();
+    const seriesForUser = allSeries.filter(lot => lot.clientUtilisateur === clientName);
+    setUserSeries(seriesForUser);
   };
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const ClientDashboardPage: React.FC = () => {
       
       if (client) {
         setCurrentUser(client);
-        loadUserLots(client);
+        loadUserSeries(client);
       }
     }
   }, []);
@@ -35,8 +35,8 @@ const ClientDashboardPage: React.FC = () => {
 
   return (
     <div className="container mx-auto p-6 space-y-8">
-      <ActivationCodeGenerator currentUser={currentUser} loadUserLots={loadUserLots} />
-      <UsedLotsTable userLots={userLots} />
+      <ActivationCodeGenerator currentUser={currentUser} loadUserSeries={loadUserSeries} />
+      <UsedLotsTable userSeries={userSeries} />
     </div>
   );
 };

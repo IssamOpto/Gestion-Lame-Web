@@ -9,23 +9,23 @@ import ExportExcelModal from '../components/features/lots/ExportExcelModal';
 import Input from '../components/ui/Input';
 
 const LotManagementPage: React.FC = () => {
-  const [lots, setLots] = useState<Lot[]>([]);
+  const [series, setSeries] = useState<Lot[]>([]);
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [filter, setFilter] = useState('');
 
-  // Function to load lots from localStorage
-  const loadLots = () => {
-    setLots(getLots());
+  // Function to load series from localStorage
+  const loadSeries = () => {
+    setSeries(getLots());
   };
 
   useEffect(() => {
-    loadLots();
+    loadSeries();
 
     // Listen for changes in localStorage from other tabs/windows
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === 'optoscopia_lots') { // Assuming LOTS_STORAGE_KEY is 'optoscopia_lots'
-        loadLots();
+        loadSeries();
       }
     };
 
@@ -37,46 +37,46 @@ const LotManagementPage: React.FC = () => {
   }, []); // Empty dependency array means this effect runs once on mount
 
   const getLastCartonNumber = () => {
-    if (lots.length === 0) return 0;
-    const maxCarton = Math.max(...lots.map(l => parseInt(l.numeroCarton, 10)));
+    if (series.length === 0) return 0;
+    const maxCarton = Math.max(...series.map(l => parseInt(l.numeroCarton, 10)));
     return maxCarton;
   };
 
-  const handleGenerateLots = (carton: number, annee: number, nombreBoites: number) => {
+  const handleGenerateSeries = (carton: number, annee: number, nombreBoites: number) => {
     const anneeStr = annee.toString().slice(-2);
     const cartonStr = carton.toString().padStart(4, '0');
-    const existingLot = lots.find(lot => lot.numeroCarton === cartonStr && lot.annee === anneeStr);
-    if (existingLot) {
+    const existingSerie = series.find(lot => lot.numeroCarton === cartonStr && lot.annee === anneeStr);
+    if (existingSerie) {
       alert('Ce numéro de carton existe déjà pour cette année.');
       return;
     }
 
-    const newLots = generateLots(carton, annee, nombreBoites);
-    const updatedLots = [...lots, ...newLots];
-    setLots(updatedLots);
-    saveLots(updatedLots);
+    const newSeries = generateLots(carton, annee, nombreBoites);
+    const updatedSeries = [...series, ...newSeries];
+    setSeries(updatedSeries);
+    saveLots(updatedSeries);
     setIsGenerateModalOpen(false);
   };
 
-  const handleDeleteLot = (lotId: string) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce lot ?")) {
-      const updatedLots = lots.filter(l => l.id !== lotId);
-      setLots(updatedLots);
-      saveLots(updatedLots);
+  const handleDeleteSerie = (lotId: string) => {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce numéro de série ?")) {
+      const updatedSeries = series.filter(l => l.id !== lotId);
+      setSeries(updatedSeries);
+      saveLots(updatedSeries);
     }
   };
   
   const handleToggleStatus = (lotId: string, newStatus: 'Actif' | 'Inactif') => {
-    const updatedLots = lots.map(lot =>
+    const updatedSeries = series.map(lot =>
       lot.id === lotId ? { ...lot, statut: newStatus } : lot
     );
-    setLots(updatedLots);
-    saveLots(updatedLots);
+    setSeries(updatedSeries);
+    saveLots(updatedSeries);
   };
   
   
 
-  const filteredLots = lots.filter(lot =>
+  const filteredSeries = series.filter(lot =>
     lot.id.toLowerCase().includes(filter.toLowerCase()) ||
     (lot.clientUtilisateur && lot.clientUtilisateur.toLowerCase().includes(filter.toLowerCase())) ||
     (lot.distributeurAssocie && lot.distributeurAssocie.toLowerCase().includes(filter.toLowerCase()))
@@ -85,11 +85,11 @@ const LotManagementPage: React.FC = () => {
   return (
     <div className="container mx-auto p-6 bg-white shadow-lg rounded-lg">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-extrabold text-gray-800">Gestion des Lots</h1>
+        <h1 className="text-4xl font-extrabold text-gray-800">Gestion de Numéros de Séries</h1>
         <div className="flex space-x-3">
           <Button onClick={() => setIsGenerateModalOpen(true)} size="lg">
             <FilePlus className="mr-2" size={20} />
-            Générer Numéro de Lot
+            Générer Numéro de Série
           </Button>
           <Button variant="success" onClick={() => setIsExportModalOpen(true)} size="lg">
             <FileOutput className="mr-2" size={20} />
@@ -101,18 +101,18 @@ const LotManagementPage: React.FC = () => {
       <div className="mb-6">
         <Input
           id="filter"
-          label="Filtrer les lots"
+          label="Filtrer les numéros de séries"
           type="text"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filtrer par numéro de lot, client ou distributeur"
+          placeholder="Filtrer par numéro de série, client ou distributeur"
         />
       </div>
 
       <div className="overflow-x-auto">
         <LotTable 
-          lots={filteredLots} 
-          onDelete={handleDeleteLot}
+          series={filteredSeries} 
+          onDelete={handleDeleteSerie}
           onToggleStatus={handleToggleStatus}
         />
       </div>
@@ -120,10 +120,10 @@ const LotManagementPage: React.FC = () => {
       <Modal
         isOpen={isGenerateModalOpen}
         onClose={() => setIsGenerateModalOpen(false)}
-        title="Générer des Nouveaux Lots"
+        title="Générer un nouveau numéro de série"
       >
         <LotGenerationForm
-          onGenerate={handleGenerateLots}
+          onGenerate={handleGenerateSeries}
           onCancel={() => setIsGenerateModalOpen(false)}
         />
       </Modal>
@@ -131,9 +131,9 @@ const LotManagementPage: React.FC = () => {
       <Modal
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
-        title="Exporter les Lots en Excel"
+        title="Exporter les Numéros de Séries en Excel"
       >
-        <ExportExcelModal lots={lots} onClose={() => setIsExportModalOpen(false)} />
+        <ExportExcelModal series={series} onClose={() => setIsExportModalOpen(false)} />
       </Modal>
     </div>
   );

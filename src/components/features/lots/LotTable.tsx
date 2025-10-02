@@ -5,14 +5,14 @@ import Button from '../../ui/Button';
 import ToggleSwitch from '../../ui/ToggleSwitch'; // Import ToggleSwitch
 
 interface LotTableProps {
-  lots: Lot[];
+  series: Lot[];
   onDelete: (lotId: string) => void;
   onToggleStatus?: (lotId: string, newStatus: 'Actif' | 'Inactif') => void; // Make optional
   showStatusColumn?: boolean; // New prop
   showActivationCodeColumn?: boolean; // New prop
 }
 
-const LotTable: React.FC<LotTableProps> = ({ lots, onDelete, onToggleStatus, showStatusColumn = true, showActivationCodeColumn = false }) => {
+const LotTable: React.FC<LotTableProps> = ({ series = [], onDelete, onToggleStatus, showStatusColumn = true, showActivationCodeColumn = false }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const handleCopy = (text: string, id: string) => {
@@ -26,7 +26,7 @@ const LotTable: React.FC<LotTableProps> = ({ lots, onDelete, onToggleStatus, sho
       <table className="min-w-full divide-y divide-gray-200 table-fixed w-full">
         <thead className="bg-gray-100">
           <tr>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Numéro de lot</th>
+            <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Numéro de série</th>
             {showActivationCodeColumn && ( // Conditionally render Code Activation column header
               <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Code Activation</th>
             )}
@@ -41,14 +41,14 @@ const LotTable: React.FC<LotTableProps> = ({ lots, onDelete, onToggleStatus, sho
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {lots.length === 0 ? (
+          {series.length === 0 ? (
             <tr>
               <td colSpan={(showStatusColumn ? 1 : 0) + (showActivationCodeColumn ? 1 : 0) + 6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"> {/* Adjust colSpan */}
-                Aucun lot trouvé.
+                Aucun numéro de série trouvé.
               </td>
             </tr>
           ) : (
-            lots.map((lot) => {
+            series.map((lot) => {
               
               return (
                 <tr key={lot.id} className="hover:bg-gray-50 even:bg-gray-50">

@@ -45,7 +45,7 @@ const Sidebar: React.FC = () => {
             </NavLink>
             <NavLink to="/lots" className={navLinkClasses}>
               <Package className="mr-3" size={20} />
-              Gestion des Lots
+              Gestion Num Séries
             </NavLink>
           </>
         )}

@@ -7,10 +7,10 @@ import { User } from '../../../data/users';
 
 interface ActivationCodeGeneratorProps {
   currentUser: User | null;
-  loadUserLots: (client: User) => void;
+  loadUserSeries: (client: User) => void;
 }
 
-const ActivationCodeGenerator: React.FC<ActivationCodeGeneratorProps> = ({ currentUser, loadUserLots }) => {
+const ActivationCodeGenerator: React.FC<ActivationCodeGeneratorProps> = ({ currentUser, loadUserSeries }) => {
   const [lotToValidate, setLotToValidate] = useState('');
   const [activationCode, setActivationCode] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +29,7 @@ const ActivationCodeGenerator: React.FC<ActivationCodeGeneratorProps> = ({ curre
     if (result.success && result.validationCode) {
       setActivationCode(result.validationCode);
       setLotToValidate(''); // Clear input field
-      loadUserLots(currentUser); // Refresh the lot table
+      loadUserSeries(currentUser); // Refresh the lot table
     } else {
       setError(result.error || 'Erreur lors de la génération du code.');
     }
@@ -52,9 +52,9 @@ const ActivationCodeGenerator: React.FC<ActivationCodeGeneratorProps> = ({ curre
           <div className="flex-grow">
               <Input
                   id="lot-to-validate"
-                  label="Numéro de Lot"
+                  label="Numéro de Série"
                   type="text"
-                  placeholder="Saisir ou scanner le numéro de lot"
+                  placeholder="Saisir ou scanner le numéro de série"
                   value={lotToValidate}
                   onChange={(e) => setLotToValidate(e.target.value)}
               />

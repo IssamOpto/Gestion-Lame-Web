@@ -25,9 +25,9 @@ const SalesTrackingTable: React.FC<SalesTrackingTableProps> = ({ lots, onDelete,
       <table className="min-w-full divide-y divide-gray-200 table-fixed w-full">
         <thead className="bg-gray-100">
           <tr>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Numéro de lot</th>
+            <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Numéro de série</th>
             <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Date de consommation</th>
-            <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Client ayant consommé le lot</th>
+            <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Client ayant consommé le numéro de série</th>
             <th scope="col" className="px-6 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
@@ -35,7 +35,7 @@ const SalesTrackingTable: React.FC<SalesTrackingTableProps> = ({ lots, onDelete,
           {lots.length === 0 ? (
             <tr>
               <td colSpan={4} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                Aucun lot consommé trouvé.
+                Aucun numéro de série consommé trouvé.
               </td>
             </tr>
           ) : (
